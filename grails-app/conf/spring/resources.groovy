@@ -4,6 +4,5 @@ import rfidreader.MockedRFIDReader;
 
 // Place your Spring DSL code here
 beans = {
-	RFIDReader(MockedRFIDReader) {
-	}
+	RFIDReader(MockedRFIDReader) {}
 }

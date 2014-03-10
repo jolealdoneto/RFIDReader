@@ -119,3 +119,12 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+grails.resources.modules = {
+    core {
+        dependsOn 'bootstrap-css, angular, angular-route, ativ3-angular-app'
+    }
+
+    'ativ3-angular-app' {
+        resource url:'/js/angular-app/app.js'
+    }
+}

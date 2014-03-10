@@ -1,0 +1,7 @@
+*.swp
+.classpath
+.gitignore.swp
+.project
+.settings/
+target-eclipse/
+target/

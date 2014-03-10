@@ -9,4 +9,11 @@ class RFIDService {
     def readTags() {
         RFIDReader.allTags
     }
+
+    def readRateTest() {
+        RFIDReader.doReadRateTest()
+    }
+    def successRateTest(String tagId) {
+        RFIDReader.doSuccessRateTest(tagId)
+    }
 }

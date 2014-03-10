@@ -13,4 +13,14 @@ class ReadingController {
     def readTags() {
         render RFIDService.readTags() as JSON
     }
+
+    def readRate() {
+        render RFIDService.readRateTest() as JSON
+    }
+
+    def successRate() {
+        def tagId = params?.tagId
+
+        render ([ result: RFIDService.successRateTest(tagId) ] as JSON)
+    }
 }
