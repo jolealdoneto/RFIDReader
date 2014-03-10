@@ -6,6 +6,10 @@ angular.module('ativ3', ['ngRoute'])
         templateUrl: 'partials/',
         controller: 'index'
       }).
+      when('/passivePage', {
+        templateUrl: 'partials/passivePage',
+        controller: 'PassivePage'
+      }).
       when('/readRate', {
         templateUrl: 'partials/readRate',
         controller: 'ReadRate'
@@ -26,6 +30,9 @@ angular.module('ativ3', ['ngRoute'])
     $scope.successRateTest = function() {
         $location.path('/successRate');
     };
+    $scope.passivePage = function() {
+        $location.path('/passivePage');
+    };
 }])
 .controller('ReadRate', ['$scope', 'TagService', function($scope, TagService) {
     $scope.tagService = TagService;
@@ -44,6 +51,12 @@ angular.module('ativ3', ['ngRoute'])
 
     // Fetch all tags first
     TagService.readTags();
+}])
+.controller('PassivePage', ['$scope', 'TagService', function($scope, TagService) {
+    $scope.tagService = TagService;
+    window.setInterval(function() {
+        TagService.readTags();
+    }, 500);
 }])
 
 .service('TagService', ['FetchResource', function(FetchResource) {

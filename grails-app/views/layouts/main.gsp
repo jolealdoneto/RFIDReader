@@ -13,7 +13,7 @@
 	</head>
 	<body>
         <div class="container">
-            <h1 style="text-align: center;">Atividade 3 - RFID</h1>
+            <h1 style="text-align: center; cursor: pointer;" onclick="location.href = '#/'">Atividade 3 - RFID</h1>
 
             <div ng-view></div>
         </div>
