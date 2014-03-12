@@ -29,14 +29,8 @@ public class MockedRFIDReader implements RFIDReader {
 	}
 
 	@Override
-	public List<Tag> doReadRateTest() {
-        Thread.sleep(10000);
-		(0..3).collect {
-			def tag = generateRandomTag()
-            tag.setSpeed(new Random().nextInt());
-
-            tag
-		}
+	public Tag doReadRateTest(String tagId) {
+        generateRandomTag()
 	}
 
 	@Override

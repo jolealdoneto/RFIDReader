@@ -18,7 +18,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
         #self.request.sendall(self.data.upper())
 
 if __name__ == "__main__":
-    HOST, PORT = "150.164.200.3", 4001
+    HOST, PORT = "150.164.7.112", 8004
 
     # Create the server, binding to localhost on port 9999
     server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)

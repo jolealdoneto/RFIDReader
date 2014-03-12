@@ -2,4 +2,6 @@
     <button class="btn btn-success" ng-click="readRateTest()">ReadRate test</button>
     <button class="btn btn-success" ng-click="successRateTest()">SuccessRate test</button>
     <button class="btn btn-success" ng-click="passivePage()">Passive Page</button>
+
+    <button class="btn btn-warning" ng-click="completeTestPage()">Complete Test</button>
 </div>

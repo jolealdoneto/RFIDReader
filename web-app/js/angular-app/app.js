@@ -18,6 +18,10 @@ angular.module('ativ3', ['ngRoute'])
         templateUrl: 'partials/successRate',
         controller: 'SuccessRate'
       }).
+      when('/completeTest', {
+        templateUrl: 'partials/completeTest',
+        controller: 'CompleteTest'
+      }).
       otherwise({
         redirectTo: '/'
       });
@@ -33,6 +37,19 @@ angular.module('ativ3', ['ngRoute'])
     $scope.passivePage = function() {
         $location.path('/passivePage');
     };
+    $scope.completeTestPage = function() {
+        $location.path('/completeTest');
+    };
+}])
+.controller('CompleteTest', ['$scope', 'TagService', function($scope, TagService) {
+    $scope.tagService = TagService;
+    $scope.performTest = function(tagId) {
+        console.log('controler: ' + tagId);
+        TagService.completeTest(tagId);
+    };
+    
+    // Fetch all tags first
+    TagService.readTags();
 }])
 .controller('ReadRate', ['$scope', 'TagService', function($scope, TagService) {
     $scope.tagService = TagService;
@@ -64,8 +81,9 @@ angular.module('ativ3', ['ngRoute'])
         var self = this;
         this.tagList = [];
 
-        this.readRate = function() {
-            FetchResource.fetch('reading/readRate', {}).success(function(data, status) {
+        this.readRate = function(tagId) {
+            console.log('js: ' + tagId);
+            FetchResource.fetch('reading/readRate', { tagId: tagId }).success(function(data, status) {
                 self.tagList = data.slice();
             });
         };
@@ -79,6 +97,11 @@ angular.module('ativ3', ['ngRoute'])
                 self.tagList = data.slice();
             });
         };
+        this.completeTest = function(tagId) {
+            FetchResource.fetch('reading/completeTest', {tagId: tagId}).success(function(data, status) {
+                console.log(data);
+            });
+        };
     }
 
     return new TagService();
@@ -87,8 +110,17 @@ angular.module('ativ3', ['ngRoute'])
     function FetchResource() {
         var self = this;
 
+        function transformToQueryString(data) {
+            var query = [];
+            angular.forEach(data, function(v,k) {
+                query.push(k+'='+v);
+            });
+
+            return '?' + query.join('&');
+        }
         this.fetch = function(url, data) {
-            return $http({method: 'GET', url: url, data: data});
+            console.log(transformToQueryString(data));
+            return $http({method: 'GET', url: url + transformToQueryString(data)});
         };
 
     }

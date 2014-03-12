@@ -32,17 +32,26 @@ public class Class1Reader implements RFIDReader {
 
     public List<Tag> getAllTags() throws AlienReaderException {
         reader.open();
-        List<Tag> tags = new ArrayList<Tag>(Arrays.asList(reader.getTagList()));
+        def list = reader.getTagList()
+        List<Tag> tags = null;
+        if (list) {
+            tags = new ArrayList<Tag>(Arrays.asList(list));
+        }
+        else {
+            tags = new ArrayList<Tag>();
+        }
         reader.close();
         
         return tags;
     }
 
-    public List<Tag> doReadRateTest() {
+    public Tag doReadRateTest(String tagId) {
         ReadRateTest rrt = new ReadRateTest();
         rrt.performTest();
+        def tagList = rrt.getTagList()
+        def tag = tagList.find { it.tagID == tagId }
 
-        //rrt.tagList()
+        tag ? tag : null
     }
 
     public double doSuccessRateTest(String tagId) {
@@ -53,10 +62,11 @@ public class Class1Reader implements RFIDReader {
         int tagReadCounter = 0;
         long runTime = 10000; // milliseconds
         long startTime = System.currentTimeMillis();
-        while(service.isRunning() && (System.currentTimeMillis()-startTime) < runTime) {
+        while((System.currentTimeMillis()-startTime) < runTime) {
             runCounter++;
-            if (this.getAllTags().find { it.tagId == tagId } != null) {
+            if (this.getAllTags().find { it.tagID == tagId } != null) {
                 tagReadCounter++;
+                Thread.sleep(500);
             }
         }
 
@@ -67,8 +77,14 @@ public class Class1Reader implements RFIDReader {
         private TagTable tagTable;
 
         public List<Tag> getTagList() {
-            System.out.println(tagTable != null);
-            List<Tag> tags = new ArrayList<Tag>(); //new ArrayList<Tag>(Arrays.asList(tagTable.getTagList()));
+            List<Tag> tags = null;
+            if (tagTable.getTagList() != null) {
+                tags = new ArrayList<Tag>(Arrays.asList(tagTable.getTagList()));
+            } else {
+                tags = new ArrayList<Tag>();
+            }
+
+            return tags;
         }
 
         public ReadRateTest() {
@@ -82,7 +98,7 @@ public class Class1Reader implements RFIDReader {
 
                 // Set up the message listener service.
                 // It handles streamed data as well as notifications.
-                service = new MessageListenerService(4000); // 4000 será a porta
+                service = new MessageListenerService(8004);
                 service.setMessageListener(this);
                 service.startService();
                 System.out.println("Message Listener has Started");
@@ -95,11 +111,10 @@ public class Class1Reader implements RFIDReader {
                 reader.setPassword("password");
 
                 reader.open();
-                System.out.println("Configuring Reader ip: " + "150.164.200.3");
 
-                reader.setNotifyAddress("150.164.200.3", 4000);
+                reader.setNotifyAddress("150.164.7.112", 8004);
                 reader.setNotifyFormat(AlienClass1Reader.XML_FORMAT); // Make sure service can decode it.
-                reader.setNotifyTrigger("ADD"); // Notify whether there's a tag or not
+                reader.setNotifyTrigger("TrueFalse"); // Notify whether there's a tag or not
                 reader.setNotifyMode(AlienClass1Reader.ON);
 
                   // Set up AutoMode
@@ -107,6 +122,7 @@ public class Class1Reader implements RFIDReader {
                 reader.setAutoStopTimer(1000); // Read for 1 second
                 reader.setAutoMode(AlienClass1Reader.ON);
 
+                reader.autoModeTriggerNow();
                 // Close the connection and spin while messages arrive
                 reader.close();
                 long runTime = 10000; // milliseconds
@@ -152,10 +168,10 @@ public class Class1Reader implements RFIDReader {
          * TagTable after   
          */
         public void tagAdded(Tag tag) {
-          System.out.println("New Tag: " + tag.getTagID() + ", v0=" + DF2.format(tag.getSpeed()) + ", d0=" + DF2.format(tag.getSmoothPosition()));
+          //System.out.println("New Tag: " + tag.getTagID() + ", v0=" + DF2.format(tag.getSpeed()) + ", d0=" + DF2.format(tag.getSmoothPosition()));
         }
         public void tagRenewed(Tag tag) {
-          System.out.println(tag.getTagID() + ", v=" + DF2.format(tag.getSmoothSpeed()) + ", d=" + DF2.format(tag.getSmoothPosition()));
+          //System.out.println(tag.getTagID() + ", v=" + DF2.format(tag.getSmoothSpeed()) + ", d=" + DF2.format(tag.getSmoothPosition()));
         }
         public void tagRemoved(Tag tag) {}
     }

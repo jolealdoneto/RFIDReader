@@ -6,4 +6,5 @@ class PartialsController {
     def readRate() { }
     def successRate() { }
     def passivePage() { }
+    def completeTest() { }
 }
