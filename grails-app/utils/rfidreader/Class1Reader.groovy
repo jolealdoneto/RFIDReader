@@ -112,7 +112,7 @@ public class Class1Reader implements RFIDReader {
 
                 reader.open();
 
-                reader.setNotifyAddress("150.164.7.112", 8004);
+                reader.setNotifyAddress("150.164.7.76", 8004);
                 reader.setNotifyFormat(AlienClass1Reader.XML_FORMAT); // Make sure service can decode it.
                 reader.setNotifyTrigger("TrueFalse"); // Notify whether there's a tag or not
                 reader.setNotifyMode(AlienClass1Reader.ON);

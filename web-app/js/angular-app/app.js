@@ -43,9 +43,20 @@ angular.module('ativ3', ['ngRoute'])
 }])
 .controller('CompleteTest', ['$scope', 'TagService', function($scope, TagService) {
     $scope.tagService = TagService;
+    $scope.results = [];
     $scope.performTest = function(tagId) {
-        console.log('controler: ' + tagId);
-        TagService.completeTest(tagId);
+        TagService.completeTest(tagId).then(function(data) {
+            $scope.results.push({
+                tagId: tagId,
+                angle: $scope.angle,
+                distance: $scope.distance,
+                readrate: data.data.result.readRate,
+                successrate: data.data.result.successRate
+            });
+        });
+    };
+    $scope.deleteRow = function(index) {
+        $scope.results.splice(index, 1);
     };
     
     // Fetch all tags first
@@ -98,8 +109,8 @@ angular.module('ativ3', ['ngRoute'])
             });
         };
         this.completeTest = function(tagId) {
-            FetchResource.fetch('reading/completeTest', {tagId: tagId}).success(function(data, status) {
-                console.log(data);
+            return FetchResource.fetch('reading/completeTest', {tagId: tagId}).success(function(data, status) {
+                return data;
             });
         };
     }

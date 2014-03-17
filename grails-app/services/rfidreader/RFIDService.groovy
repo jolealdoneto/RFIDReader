@@ -18,7 +18,11 @@ class RFIDService {
     }
 
     def doCompleteTest(String tagId) {
-        def readRate = RFIDReader.doReadRateTest(tagId).getRenewCount();
+        def readRateTest = RFIDReader.doReadRateTest(tagId);
+        def readRate = 0
+        if (readRateTest) {
+            readRate = readRateTest.getRenewCount()
+        }
         Thread.sleep(1000);
         def successRate = RFIDReader.doSuccessRateTest(tagId);
 
