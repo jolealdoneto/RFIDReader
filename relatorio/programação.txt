@@ -1,0 +1,30 @@
+Sumário
+===========
+- Processo
+- Dificuldades
+- Estrutura
+- Conclusão
+
+Processo
+========
+A programação do sistema para a realização da bateria de testes foi feita de forma cooperativa. Cada um do grupo teve um papel específico na realização do software e a ferramenta de versionamento GIT foi usada para uma colaboração sem atritos. Como plataforma de compartilhamento, o github.com foi utilizado.
+
+O Software foi desenvolvido em três partes: Concepção, realização e testes. Na concepção, a API fornecida e sua documentação foram estudadas para a extração dos dados necessários para a análise. Na realização, com os dados em mão o servidor e a interface foram criados, utilizando Grails como linguagem. Este utiliza também a JVM (Java Virtual Machine), possibilitando a utilização do arcabouço escrito em Java que a Alien fornece. Finalmente, na fase de testes o sistema foi testado diretamente no hardware, onde foram necessários alguns ajustes para que este funcionasse.
+
+Dificuldades
+============
+Como todo projeto sadio, este também teve suas dificuldades. Na programação do sistema, um leitor remoto foi utilizado por meio de uma VPN. Por medidas de segurança desta rede segura, nem todos os comandos enviados para o leitor remoto puderam ser completados. O hardware respondia sem falhas aos comandos ativos - aqueles que simplesmente se recebe o resultado diretamente após a resposta -, e por isso foi presumido que os testes poderiam ser também feitos de forma remota. Mas ao testar os comandos passivos, aqueles em que se cria um servidor na máquina local e se espera as leituras do hardware, foi percebido que nenhum pacote conseguia chegar a seu destinatário. Neste caso: nosso servidor.
+
+Adicionalmente, várias exceções apareceram quando testamos o sistema diretamente com o hardware. Como o desenvolvimento foi feito utilizando a técnica de "Mocks" - classes que imitam o aparelho -, vários erros de dados não puderam ser tratados, já que as saídas de dados eram determinísticas. Ou seja, algumas vezes era esperado um "int", mas um "double" era entregue ao invés. Isso foi resolvido após algum tempo, o que tornou o software um pouco mais resiliente. 
+
+Outro aspecto do desenvolvimento que deveria ter sido tomado em conta era o fato de que nem sempre o leitor estava disponível. Este suportava somente um usuário por vez. Significava que muitas vezes no meio de um teste outro usuário tentava o acesso ao aparelho, interferindo com este e alterando as estatísticas no final.
+
+Estrutura
+=========
+O sistema foi feito puramente em Grails na parte do servidor, utilizando então a API em Java da Alien, que por sua vez fazia a comunicação com o leitor. Isso facilitou muito o desenvolvemento, já que o Grails fornece o mecanismo de injeção de dependência que nos permite criar interfaces que irão simular o resultado do leitor na hora do desenvolvimento. E por sua vez na fase de produção podíamos então simplesmente trocar esta classe por sua contra-parte verdadeira. A interface com o usuário é possibilitado a partir de um navedor comum (Firefox, Chrome, Safari e outros). Para a programação da interface Web, resolvemos usar o AngularJS, um Framework de Front-end que facilita a manipulação de DOM e de texto.
+
+[figura]
+
+Conclusão
+=========
+A programação de um sistema que faz os testes e a leitura de etiquetas RFID foi muito proveitosa. Aprendemos um pouco mais de como estes leitores realmente funcionam e entendemos a fundo as possibilidades que essa tecnologia oferece. O Kit de desenvolvemento da Alien fornece uma oportunidade única para uma inclusão nesta área, já que pode-se testar extensivamente e obter resultados quase que simultâneos. Vê-se então que para o entendimento completo de quão importante essa inovação é para a Internet das Coisas, é necessário sujar as mãos, errar e testar diferentes técnicas, munidos sempre de um leitor e etiqueta.
